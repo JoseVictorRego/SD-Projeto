@@ -14,11 +14,14 @@ public class cliente {
 
             // Solicitação para selecionar um arquivo
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("Digite o seu nome: "); // Solicitação do nome do cliente
+            String clientName = br.readLine();
+
             System.out.print("Digite o caminho completo do arquivo a ser enviado: ");
             String filePath = br.readLine();
 
-            // Enviando o arquivo com o nome do arquivo
-            sendFile(socket, filePath);
+            // Enviando o nome do cliente e o arquivo com o nome do arquivo
+            sendFile(socket, clientName, filePath);
 
             // Fechando a conexão
             socket.close();
@@ -29,16 +32,19 @@ public class cliente {
         }
     }
 
-    private static void sendFile(Socket socket, String filePath) throws IOException {
+    private static void sendFile(Socket socket, String clientName, String filePath) throws IOException {
         File file = new File(filePath);
         if (!file.exists()) {
             System.out.println("Arquivo não encontrado.");
             return;
         }
 
-        // Enviar o nome do arquivo antes dos dados do arquivo
-        String fileName = file.getName();
+        // Enviar o nome do cliente antes do nome do arquivo e dos dados do arquivo
         OutputStream os = socket.getOutputStream();
+        os.write(clientName.getBytes());
+        os.write("\n".getBytes());
+
+        String fileName = file.getName();
         os.write(fileName.getBytes());
         os.write("\n".getBytes());
 

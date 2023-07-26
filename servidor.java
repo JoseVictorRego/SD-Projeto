@@ -1,8 +1,12 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 public class servidor {
+
+    private static Map<String, String> clientFolders = new HashMap<>(); // Mapear o nome do cliente para a pasta
 
     public static void main(String[] args) {
         int serverPort = 4000; // Porta do servidor
@@ -33,15 +37,24 @@ public class servidor {
     private static void receiveFile(Socket clientSocket) throws IOException {
         InputStream is = clientSocket.getInputStream();
 
-        // Diretório onde os arquivos serão armazenados no servidor
-        String saveDir = "C:\\Users\\jdeli\\Videos\\";
-        File directory = new File(saveDir);
-        if (!directory.exists()) {
-            directory.mkdirs();
+        // Receber o nome do cliente
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        String clientName = br.readLine();
+
+        // Verificar se a pasta do cliente já foi criada
+        String saveDir = clientFolders.get(clientName);
+        if (saveDir == null) {
+            // Se a pasta ainda não existe, criar uma nova pasta
+            saveDir = "C:\\Users\\jdeli\\Videos\\servidor\\" + clientName + "\\";
+            File directory = new File(saveDir);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            // Adicionar a pasta ao mapa para reutilização futura
+            clientFolders.put(clientName, saveDir);
         }
 
         // Receber o nome do arquivo
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String fileName = br.readLine();
 
         // Criar um novo arquivo com o nome recebido
