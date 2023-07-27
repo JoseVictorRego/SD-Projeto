@@ -17,7 +17,7 @@ public class servidor {
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("Cliente conectado: " + clientSocket.getInetAddress().getHostAddress());
+                System.out.println("\n-----Cliente conectado------\n");
 
                 // Tratar a conexão em uma thread separada para permitir o atendimento a múltiplos clientes
                 Thread thread = new Thread(() -> {
@@ -45,7 +45,7 @@ public class servidor {
         String saveDir = clientFolders.get(clientName);
         if (saveDir == null) {
             // Se a pasta ainda não existe, criar uma nova pasta
-            saveDir = "C:\\Users\\jdeli\\Videos\\servidor\\" + clientName + "\\";
+            saveDir = "C:\\Users\\jdeli\\Videos\\Armazenamento_Servidor\\" + clientName + "\\";
             File directory = new File(saveDir);
             if (!directory.exists()) {
                 directory.mkdirs();
@@ -69,7 +69,7 @@ public class servidor {
 
         fos.flush();
         fos.close();
-        System.out.println("Arquivo recebido e salvo com sucesso: " + fileName);
+        System.out.println("Cliente: "+clientName+".\n ->Enviou um Arquivo e foi salvo com sucesso: " + fileName);
 
         // Fechando a conexão com o cliente
         clientSocket.close();

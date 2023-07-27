@@ -3,39 +3,43 @@ import java.net.Socket;
 
 public class cliente {
 
-    public static void main(String[] args) {
-        String serverAddress = "127.0.0.1"; // Endereço IP do servidor
-        int serverPort = 4000; // Porta do servidor
+    public static void main(String[] args) throws InterruptedException{
+        dns DNS = new dns();
 
-        try {
-            // Conectando ao servidor
-            Socket socket = new Socket(serverAddress, serverPort);
-            System.out.println("Conectado ao servidor.");
+        while (true) {
+            try {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+                
+                // Conectando ao servidor
+                Socket socket = new Socket(DNS.serveIp, DNS.serverPort);
+                System.out.println("Conectado ao servidor.");
 
-            // Solicitação para selecionar um arquivo
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            System.out.print("Digite o seu nome: "); // Solicitação do nome do cliente
-            String clientName = br.readLine();
+                // Solicitação para selecionar um arquivo
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+                System.out.print("Digite o seu nome: "); // Solicitação do nome do cliente
+                String clientName = br.readLine();
 
-            System.out.print("Digite o caminho completo do arquivo a ser enviado: ");
-            String filePath = br.readLine();
+                System.out.print("Digite o caminho completo do arquivo a ser enviado: ");
+                String filePath = br.readLine();
 
-            // Enviando o nome do cliente e o arquivo com o nome do arquivo
-            sendFile(socket, clientName, filePath);
+                // Enviando o nome do cliente e o arquivo com o nome do arquivo
+                sendFile(socket, clientName, filePath);
 
-            // Fechando a conexão
-            socket.close();
-            System.out.println("Conexão encerrada.");
+                // Fechando a conexão
+                socket.close();
+                System.out.println("Conexão encerrada.");
+                br.readLine();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private static void sendFile(Socket socket, String clientName, String filePath) throws IOException {
         File file = new File(filePath);
         if (!file.exists()) {
-            System.out.println("Arquivo não encontrado.");
+            System.out.println("\n ->Arquivo não encontrado.\n");
             return;
         }
 
@@ -58,6 +62,6 @@ public class cliente {
 
         os.flush();
         fis.close();
-        System.out.println("Arquivo enviado com sucesso.");
+        System.out.println("\n ->Arquivo enviado com sucesso.\n");
     }
 }
