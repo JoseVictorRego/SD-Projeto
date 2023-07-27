@@ -31,7 +31,7 @@ public class cliente {
                 br.readLine();
 
             } catch (IOException e) {
-                System.out.println("Servidor não Encontrado."); break;
+                System.out.println(" ->Servidor não Encontrado.\n"); break;
             }
         }
     }

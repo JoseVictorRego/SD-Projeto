@@ -24,13 +24,13 @@ public class servidor {
                     try {
                         receiveFile(clientSocket);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        System.out.println("-> Servidor perdeu Conexão com o cliente!!");
                     }
                 });
                 thread.start();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("-> Servidor Parou!!");
         }
     }
 
@@ -73,5 +73,6 @@ public class servidor {
 
         // Fechando a conexão com o cliente
         clientSocket.close();
+        System.out.println("Cliente: "+clientName+" Saiu!!\n");
     }
 }
