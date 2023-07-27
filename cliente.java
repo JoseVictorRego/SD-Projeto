@@ -9,7 +9,7 @@ public class cliente {
         dns DNS = new dns(); 
 
         //Funções de Envio de dados
-        funcao Funcao = new funcao();
+        cliente_funcao Funcao = new cliente_funcao();
 
         while (true) { //Loop Basico para o Cliente ficar sempre em conexão com o servidor
             try {

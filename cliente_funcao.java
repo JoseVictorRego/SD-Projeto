@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class funcao {
+public class cliente_funcao {
     public static void enviarArquivo(Socket socket, String clientName, String filePath) throws IOException {
         File arquivo = new File(filePath); // Usando a Função File.
 
