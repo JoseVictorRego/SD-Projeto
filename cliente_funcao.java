@@ -6,6 +6,7 @@ import java.net.Socket;
 
 public class cliente_funcao {
     public static void enviarArquivo(Socket socket, String clientName, String filePath) throws IOException {
+        
         File arquivo = new File(filePath); // Usando a Função File.
 
         if (!arquivo.exists()) {           //Caso o Arquivo não exista ou não encontrado
@@ -18,14 +19,20 @@ public class cliente_funcao {
         os.write(clientName.getBytes());
         os.write("\n".getBytes());
 
+        //Copia o nome do arquivo para a string fileName para enviar ao servidor.
         String fileName = arquivo.getName();
         os.write(fileName.getBytes());
         os.write("\n".getBytes());
 
-        FileInputStream fis = new FileInputStream(arquivo);
+        // Reseve o Arquivo para preparar o envio 
+        FileInputStream fis = new FileInputStream(arquivo); 
 
-        byte[] buffer = new byte[4096];
+        byte[] buffer = new byte[4096]; //buffer usado para armazenar temporariamente os bytes lidos do arquivo antes de serem enviados
+        
+        //Quarda a quantidade de bytes lidos
         int bytesRead;
+
+        //Faz a leiturua dos byte do arquivo e envia ao servido e finaliza quando chegar em '-1'
         while ((bytesRead = fis.read(buffer)) != -1) {
             os.write(buffer, 0, bytesRead);
         }
