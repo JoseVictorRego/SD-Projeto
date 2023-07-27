@@ -22,7 +22,8 @@ public class serve_funcao {
         String saveDir = clientFolders.get(clientName);
         if (saveDir == null) {
             // Se a pasta ainda não existe, criar uma nova pasta
-            saveDir = "C:\\Users\\jdeli\\Videos\\Armazenamento_Servidor\\" + clientName + "\\";
+            String currentDir = System.getProperty("user.dir");
+            saveDir = currentDir + "\\arquivos\\" + clientName + "\\";
             File directory = new File(saveDir);
             if (!directory.exists()) {
                 directory.mkdirs();
