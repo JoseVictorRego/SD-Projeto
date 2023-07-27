@@ -4,9 +4,14 @@ import java.net.Socket;
 public class cliente {
 
     public static void main(String[] args) throws InterruptedException{
-        dns DNS = new dns();
+        
+        //Dados do DNS
+        dns DNS = new dns(); 
 
-        while (true) {
+        //Funções de Envio de dados
+        funcao Funcao = new funcao();
+
+        while (true) { //Loop Basico para o Cliente ficar sempre em conexão com o servidor
             try {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
                 
@@ -16,52 +21,27 @@ public class cliente {
 
                 // Solicitação para selecionar um arquivo
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-                System.out.print("Digite o seu nome: "); // Solicitação do nome do cliente
+
+                // Solicitação do nome do cliente
+                System.out.print("Digite o seu nome: "); 
                 String clientName = br.readLine();
 
+                // Solicitação do caminho do arquivo a ser enviado
                 System.out.print("Digite o caminho completo do arquivo a ser enviado: ");
                 String filePath = br.readLine();
 
                 // Enviando o nome do cliente e o arquivo com o nome do arquivo
-                sendFile(socket, clientName, filePath);
+                Funcao.enviarArquivo(socket, clientName, filePath);
 
                 // Fechando a conexão
                 socket.close();
                 System.out.println("Conexão encerrada.");
+
                 br.readLine();
 
-            } catch (IOException e) {
-                System.out.println(" ->Servidor não Encontrado.\n"); break;
+            } catch (IOException e) { // Caso não haja conexão com o servidor
+                System.out.println("Servidor não Encontrado."); break;
             }
         }
-    }
-
-    private static void sendFile(Socket socket, String clientName, String filePath) throws IOException {
-        File file = new File(filePath);
-        if (!file.exists()) {
-            System.out.println("\n ->Arquivo não encontrado.\n");
-            return;
-        }
-
-        // Enviar o nome do cliente antes do nome do arquivo e dos dados do arquivo
-        OutputStream os = socket.getOutputStream();
-        os.write(clientName.getBytes());
-        os.write("\n".getBytes());
-
-        String fileName = file.getName();
-        os.write(fileName.getBytes());
-        os.write("\n".getBytes());
-
-        FileInputStream fis = new FileInputStream(file);
-
-        byte[] buffer = new byte[4096];
-        int bytesRead;
-        while ((bytesRead = fis.read(buffer)) != -1) {
-            os.write(buffer, 0, bytesRead);
-        }
-
-        os.flush();
-        fis.close();
-        System.out.println("\n ->Arquivo enviado com sucesso.\n");
     }
 }
